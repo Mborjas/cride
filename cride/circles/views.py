@@ -8,7 +8,8 @@ from cride.circles.models import Circle
 # Django REST Framework
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+# Serializers
+from cride.circles.serializers import CircleSerializer
 
 # def list_circles(request):
 #     """LIst Circle """
@@ -29,20 +30,31 @@ from rest_framework.response import Response
 
 #     return JsonResponse(data,safe=False)
 
+# @api_view(['GET'])
+# def list_circles(request):
+#     """List Circle """
+#     circles = Circle.objects.filter(is_public=True)
+#     data = []
+#     for circle in circles: #aki se se hace el query (lazy)
+#         data.append({
+#             'name':circle.name,
+#             'slug_name':circle.slug_name,
+#             'rides_taken':circle.rides_taken
+#         })
+
+#     return Response(data)
+
+
 @api_view(['GET'])
 def list_circles(request):
     """List Circle """
     circles = Circle.objects.filter(is_public=True)
     data = []
     for circle in circles: #aki se se hace el query (lazy)
-        data.append({
-            'name':circle.name,
-            'slug_name':circle.slug_name,
-            'rides_taken':circle.rides_taken
-        })
+        serializer = CircleSerializer(circle)
+        data.append(serializer.data)
 
     return Response(data)
-
 
 @api_view(['POST'])
 def create_circle(request):
