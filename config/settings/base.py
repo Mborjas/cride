@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     # agregando modulo por mbc
     'cride.users.apps.UsersAppConfig',
+    'cride.circles.apps.CirclesAppConfig',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
