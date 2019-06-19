@@ -4,6 +4,8 @@
 # Django
 from django.contrib.auth import authenticate, password_validation
 from django.core.validators import RegexValidator
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 
 # Django REST Framework
@@ -28,6 +30,8 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=data['email'], password=data['password'])
         if not user:
             raise serializers.ValidationError('Invalid credentials')
+        if not user.is_verified:
+            raise serializers.ValidationError('Account is not active yet :(')
         # para que sea compartido con los serializer    
         self.context['user'] = user
         return data
@@ -101,11 +105,31 @@ class UserSignUpSerializer(serializers.Serializer):
         # para no mostrar en al respuesta
         data.pop('password_confirmation')
 
-        user = User.objects.create_user(**data)
+        user = User.objects.create_user(**data,is_verified=False)
         Profile.objects.create(user=user)
+        self.send_confirmation_email(user)
         return user
 
+    def gen_verification_token(self,user):
+        """Create JWT token that the user can use to verify its account."""
+        return "abc"
 
+    def send_confirmation_email(self,user):
+        """Send account verification link to given user."""
+        verification_token = self.gen_verification_token(user)
+
+        # ejemplo sacado de from django.core.mail import EmailMultiAlternatives
+        subject = 'Welcome @{}! Verify your account to start using Comparte Ride'.format(user.username)
+        from_email = 'Comparte Ride <noreply@comparteride.com>'
+        content = render_to_string(
+            'emails/users/account_verification.html',
+            {'token': verification_token, 'user': user}
+        )
+        text_content = 'This is an important message.'
+        html_content = '<p>This is an <strong>important</strong> message.</p>'
+        msg = EmailMultiAlternatives(subject, content, from_email, [user.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 
 
