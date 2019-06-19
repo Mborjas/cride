@@ -84,11 +84,20 @@ def list_circles(request):
 #     return Response(data)
 
 
+# @api_view(['POST'])
+# def create_circle(request):
+#     """Create Circle """
+#     serializer = CreateCircleSerializer(data=request.data)
+#     serializer.is_valid(raise_exception=True)
+#     data = serializer.data
+#     circle = Circle.objects.create(**data)
+#     return Response(CircleSerializer(circle).data)
+
 @api_view(['POST'])
 def create_circle(request):
     """Create Circle """
     serializer = CreateCircleSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    data = serializer.data
-    circle = Circle.objects.create(**data)
+    circle = serializer.save()
     return Response(CircleSerializer(circle).data)
+
