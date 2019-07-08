@@ -57,14 +57,14 @@ from cride.circles.serializers import CircleSerializer, CreateCircleSerializer
 #     return Response(data)
 
 
-@api_view(['GET'])
-def list_circles(request):
-    """List Circle """
-    circles = Circle.objects.filter(is_public=True)
-    # many=True > porque va traer un arrelgo de varios registros
-    serializer = CircleSerializer(circles,many=True)
+# @api_view(['GET'])
+# def list_circles(request):
+#     """List Circle """
+#     circles = Circle.objects.filter(is_public=True)
+#     # many=True > porque va traer un arrelgo de varios registros
+#     serializer = CircleSerializer(circles,many=True)
 
-    return Response(serializer.data)
+#     return Response(serializer.data)
 
 
 # @api_view(['POST'])
@@ -93,11 +93,11 @@ def list_circles(request):
 #     circle = Circle.objects.create(**data)
 #     return Response(CircleSerializer(circle).data)
 
-@api_view(['POST'])
-def create_circle(request):
-    """Create Circle """
-    serializer = CreateCircleSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    circle = serializer.save()
-    return Response(CircleSerializer(circle).data)
+# @api_view(['POST'])
+# def create_circle(request):
+#     """Create Circle """
+#     serializer = CreateCircleSerializer(data=request.data)
+#     serializer.is_valid(raise_exception=True)
+#     circle = serializer.save()
+#     return Response(CircleSerializer(circle).data)
 
