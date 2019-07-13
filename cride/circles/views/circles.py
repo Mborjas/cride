@@ -25,6 +25,8 @@ class CircleViewSet(mixins.CreateModelMixin,
 
     queryset = Circle.objects.all()
     serializer_class = CircleModelSerializer
+    # permite filtra en la url por este campo
+    lookup_field = 'slug_name'
 
     # permission_classes = (IsAuthenticated,)
 
