@@ -21,6 +21,9 @@ from cride.users.models import User, Profile
 import jwt
 from datetime import timedelta
 
+# Serializers
+from cride.users.serializers.profiles import ProfileModelSerializer
+
 # lo utiliza para obtener
 class UserLoginSerializer(serializers.Serializer):
     """User login serializer.
@@ -53,6 +56,8 @@ class UserLoginSerializer(serializers.Serializer):
 class UserModelSerializer(serializers.ModelSerializer):
     """User model serializer."""
 
+    profile = ProfileModelSerializer(read_only=True)
+
     class Meta:
         """Meta class."""
 
@@ -62,7 +67,8 @@ class UserModelSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
-            'phone_number'
+            'phone_number',
+            'profile'
         )
 
 class UserSignUpSerializer(serializers.Serializer):
